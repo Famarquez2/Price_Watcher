@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 
 /** A special panel to display the detail of an item. */
@@ -30,6 +35,7 @@ public class ItemView extends JPanel {
 	
 	/** Directory for image files: src/image in Eclipse. */
 	private final static String IMAGE_DIR = "/image/";
+	private final static String SOUND_DIR = "/sound/";
         
 	/** View-page clicking listener. */
     private ClickListener listener;
@@ -110,7 +116,15 @@ public class ItemView extends JPanel {
         }
         return null;
     }
-    
-    	
-
+    public void playSound(String sound) {
+ 	try {
+    		URL url = new URL(getClass().getResource(SOUND_DIR), sound);
+            AudioInputStream in = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(in);
+            clip.start();
+        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
 }
